@@ -2,13 +2,13 @@
 using PuppeteerSharp;
 using System;
 using System.Threading.Tasks;
-using static SpiderForJobInCore.DataParese;
+using static SpiderForJobInCore.Model.DAO.DataParese;
 
-namespace PuppeteerSharpXhrExample
+namespace SpiderForJobInCore.Model.DAO
 {
     class Program
     {
-        static async Task Main()
+        static async Task Main1()
         {
             DataParse();
             return;
@@ -42,7 +42,7 @@ namespace PuppeteerSharpXhrExample
                 }
             };
 
-            await page.GoToAsync("https://we.51job.com/pc/search?keyword=c%23&searchType=2&sortType=0&metro=&pageNum=2");
+            await page.GoToAsync("https://we.51job.com/pc/search?keyword=WPF&searchType=2&sortType=0&metro=&pageNum=2");
 
             while (cnt < MAX_PAGE)
             {

@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpiderForJobInCore", "SpiderForJobInCore.csproj", "{C48BEDAB-2E6B-44FA-9D5E-0A9CBBE6A7DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyORMTest3", "..\MyORMTest3\MyORMTest3.csproj", "{CDEB39A8-664E-428C-AA1F-5812FE4F7FA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{C48BEDAB-2E6B-44FA-9D5E-0A9CBBE6A7DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C48BEDAB-2E6B-44FA-9D5E-0A9CBBE6A7DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C48BEDAB-2E6B-44FA-9D5E-0A9CBBE6A7DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDEB39A8-664E-428C-AA1F-5812FE4F7FA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDEB39A8-664E-428C-AA1F-5812FE4F7FA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDEB39A8-664E-428C-AA1F-5812FE4F7FA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDEB39A8-664E-428C-AA1F-5812FE4F7FA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
