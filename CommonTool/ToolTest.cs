@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace SpiderForJobInCore.CommonTool
+﻿namespace SpiderForJobInCore.CommonTool
 {
     internal class ToolTest
     {
-        public static void Main()
-        {
-            Console.WriteLine(ModelCommonTool.ConvertCamelCaseToSnakeCase("BigDataSing"));
-        }
+        //public static void Main()
+        //{
+        //    Console.WriteLine(ModelCommonTool.ConvertCamelCaseToSnakeCase("BigDataSing"));
+        //}
     }
 }

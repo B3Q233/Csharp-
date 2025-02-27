@@ -14,7 +14,6 @@ namespace SpiderForJobInCore.Model.DataAttribute
             TableName = tableName;
         }
     }
-
     // 用于标记属性对应的字段名和字段类型
     [AttributeUsage(AttributeTargets.Property)]
     public class ColumnAttribute : Attribute
@@ -26,6 +25,18 @@ namespace SpiderForJobInCore.Model.DataAttribute
         {
             ColumnName = columnName;
             ColumnType = columnType;
+        }
+    }
+    // 用于标记外键信息
+    [AttributeUsage(AttributeTargets.Property)]
+    public class ForeignKeyAttribute : Attribute
+    {
+        public string ReferencedTableName { get; }
+        public string ReferencedColumnName { get; }
+        public ForeignKeyAttribute(string referencedTableName, string referencedColumnName)
+        {
+            ReferencedTableName = referencedTableName;
+            ReferencedColumnName = referencedColumnName;
         }
     }
 }

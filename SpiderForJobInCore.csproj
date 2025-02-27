@@ -15,8 +15,4 @@
     <PackageReference Include="WebEssentials.AspNetCore.PWA" Version="1.0.85" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Model\Services\" />
-  </ItemGroup>
-
 </Project>
