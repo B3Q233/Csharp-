@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace SpiderForJobInCore.CommonTool
 {
@@ -24,6 +25,13 @@ namespace SpiderForJobInCore.CommonTool
                 result.Append(char.ToLower(trimmedStr[i]));
             }
             return result.ToString();
+        }
+
+        // 获取UUID
+        public static string GetUUID()
+        {
+            Guid uuid = Guid.NewGuid();
+            return uuid.ToString();
         }
     }
 

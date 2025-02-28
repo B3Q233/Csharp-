@@ -1,4 +1,5 @@
 ﻿using SpiderForJobInCore.CommonTool;
+using SpiderForJobInCore.Model.DAO;
 using SpiderForJobInCore.Model.DataAttribute;
 using System;
 using System.Collections.Generic;
@@ -7,139 +8,21 @@ using System.Linq;
 using System.Reflection;
 namespace SpiderForJobInCore.Model.Services
 {
-
-    [TableName("mini_jobs")]
-    public class MiniJob
+    [TableName("test")]
+    public class Test
     {
-        [Column("mini_job_id", "INTEGER PRIMARY KEY AUTOINCREMENT")]
-        [ForeignKey("jobs", "job_id")]
-        public int MiniJobId { get; set; }
-        public string Title { get; set; }
+        [Column("job_uuid", "TEXT PRIMARY KEY")]
+        public string TestID { get; set; }
 
-        [Column("description", "TEXT")]
-        public int Description { get; set; }
+        [Column("name", "TEXT NOT NULL Unique")]
+        public string Name { get; set; }
+
+        [Column("age", "INTEGER")]
+        public int Age { get; set; }
+
+        [Column("create_time", "DATETIME")]
+        public DateTime CreateTime { get; set; }
     }
-
-    [TableName("mini_job2")]
-    public class MiniJob2
-    {
-        [Column("mini_job_id", "INTEGER PRIMARY KEY AUTOINCREMENT")]
-        [ForeignKey("jobs", "job_id")]
-        public int MiniJobId { get; set; }
-        public string Title { get; set; }
-
-        [Column("description", "TEXT")]
-        public int Description { get; set; }
-    }
-
-    [TableName("jobs")]
-    public class Job
-    {
-        [Column("job_id", "INTEGER PRIMARY KEY AUTOINCREMENT")]
-        public int JobId { get; set; }
-        public string Title { get; set; }
-
-        [Column("mini_jobs", "CLASS")]
-        public MiniJob MiniJob { get; set; }
-
-        [Column("description", "TEXT")]
-        [ForeignKey("Job", "job_id")]
-        public string Description { get; set; }
-
-        [Column("mini_job2", "CLASS")]
-        public MiniJob2 MiniJob2 { get; set; }
-    }
-    //public class DatabaseHelper
-    //{
-    //    private readonly string _connectionString;
-
-    //    public DatabaseHelper(string databasePath)
-    //    {
-    //        _connectionString = $"Data Source={databasePath};Version=3;";
-    //    }
-
-    //    public void CreateTable<T>()
-    //    {
-    //        CreateTable(typeof(T));
-    //    }
-
-    //    public void CreateTable(Type type)
-    //    {
-    //        Type otherTableName = null;
-    //        string columnsDefinition = "";
-
-    //        TableNameAttribute tableNameAttribute = type.GetCustomAttribute<TableNameAttribute>() ?? throw new InvalidOperationException($"The type {type.Name} does not have a TableNameAttribute.");
-    //        string tableName = tableNameAttribute.TableName;
-    //        PropertyInfo[] properties = type.GetProperties();
-    //        string defaultCulumnType = "TEXT";
-    //        foreach (PropertyInfo property in properties)
-    //        {
-    //            ColumnAttribute columnAttribute = property.GetCustomAttribute<ColumnAttribute>();
-    //            string columnName = "";
-    //            string columnType = "";
-    //            if (columnAttribute != null)
-    //            {
-    //                columnName = columnAttribute.ColumnName;
-    //                columnType = columnAttribute.ColumnType;
-    //                if (columnType == "CLASS")
-    //                {
-    //                    if (property.PropertyType.FullName == type.FullName)
-    //                    {
-    //                        throw new InvalidOperationException($"Cannot add a property of the same type as the class itself in table {tableName}. Property name: {property.Name}, Class name: {type.FullName}");
-    //                    }
-    //                    otherTableName = property.PropertyType;
-    //                }
-    //                else
-    //                {
-    //                    if (!string.IsNullOrEmpty(columnsDefinition))
-    //                    {
-    //                        columnsDefinition += ", ";
-    //                    }
-    //                    columnsDefinition += $"{columnName} {columnType}";
-    //                }
-    //            }
-    //            else
-    //            {
-    //                columnName = ModelCommonTool.ConvertCamelCaseToSnakeCase(property.Name);
-    //                columnType = defaultCulumnType;
-    //                if (!string.IsNullOrEmpty(columnsDefinition))
-    //                {
-    //                    columnsDefinition += ", ";
-    //                }
-    //                columnsDefinition += $"{columnName} {columnType}";
-    //            }
-    //            ForeignKeyAttribute foreignKeyAttribute = property.GetCustomAttribute<ForeignKeyAttribute>();
-    //            if (foreignKeyAttribute != null)
-    //            {
-    //                if (!string.IsNullOrEmpty(columnsDefinition))
-    //                {
-    //                    columnsDefinition += ", ";
-    //                }
-    //                columnsDefinition += $"FOREIGN KEY ({columnName}) REFERENCES {foreignKeyAttribute.ReferencedTableName}({foreignKeyAttribute.ReferencedColumnName})";
-    //            }
-    //        }
-
-    //        if (string.IsNullOrEmpty(columnsDefinition))
-    //        {
-    //            throw new InvalidOperationException($"No columns found for type {type.Name}.");
-    //        }
-
-    //        string createTableQuery = $"CREATE TABLE IF NOT EXISTS {tableName} ({columnsDefinition});";
-
-    //        Console.WriteLine(createTableQuery);
-
-    //        using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
-    //        {
-    //            connection.Open();
-    //            using (SQLiteCommand command = new SQLiteCommand(createTableQuery, connection))
-    //            {
-    //                command.ExecuteNonQuery();
-    //            }
-    //        }
-    //        if (otherTableName != null) CreateTable(otherTableName);
-    //    }
-    //}
-
     public class TableCreator
     {
         private readonly string _connectionString;
@@ -157,7 +40,7 @@ namespace SpiderForJobInCore.Model.Services
             var tableNameAttribute = type.GetCustomAttribute<TableNameAttribute>();
             if (tableNameAttribute == null)
             {
-                throw new InvalidOperationException($"The type {type.Name} does not have a TableNameAttribute.");
+                throw new InvalidOperationException($"The type {type.FullName} does not have a TableNameAttribute.");
             }
 
             string tableName = tableNameAttribute.TableName;
@@ -171,7 +54,14 @@ namespace SpiderForJobInCore.Model.Services
                 var columnInfo = GetColumnInfo(property, type, tableName);
                 if (columnInfo.IsClassType)
                 {
-                    otherTableTypes.Add(property.PropertyType);
+                    if (columnInfo.Definition == "CLASS")
+                    {
+                        otherTableTypes.Add(GetEntityType(columnInfo.ColumnName));
+                    }
+                    else
+                    {
+                        otherTableTypes.Add(property.PropertyType);
+                    }
                 }
                 else
                 {
@@ -230,7 +120,7 @@ namespace SpiderForJobInCore.Model.Services
                         throw new InvalidOperationException($"Cannot add a property of the same type as the class itself in table {tableName}. Property name: {property.Name}, Class name: {type.FullName}");
                     }
                     isClassType = true;
-                    return (string.Empty, columnName, isClassType);
+                    return ("CLASS", columnName, isClassType);
                 }
             }
             else
@@ -250,17 +140,139 @@ namespace SpiderForJobInCore.Model.Services
             }
             return string.Empty;
         }
+        // 根据类名获取实体类型
+        private Type GetEntityType(string entityFullName)
+        {
+            try
+            {
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                return assembly.GetType(entityFullName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting entity type for {entityFullName}: {ex.Message}");
+                return null;
+            }
+        }
+        // 插入数据到表中
+        public void InsertDataToTable(object entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity), "insert data cannot be null。");
+            }
+
+            Type type = entity.GetType();
+            // 获取表名
+            string tableName = GetTableName(type);
+
+            // 判断表是否存在
+            if (!IsTableExist(tableName))
+            {
+                CreateTable(type);
+            }
+
+            if (string.IsNullOrEmpty(tableName))
+            {
+                throw new InvalidOperationException($"can not find table name for type {type.FullName} ");
+            }
+
+            // 构建插入语句的列名和值
+            string columns = "";
+            string values = "";
+            PropertyInfo[] properties = type.GetProperties();
+            bool isFirst = true;
+
+            foreach (PropertyInfo property in properties)
+            {
+                ColumnAttribute columnAttribute = property.GetCustomAttribute<ColumnAttribute>();
+                if (columnAttribute != null)
+                {
+                    if (!isFirst)
+                    {
+                        columns += ", ";
+                        values += ", ";
+                    }
+
+                    columns += columnAttribute.ColumnName;
+                    object propertyValue = property.GetValue(entity);
+                    if (propertyValue is string)
+                    {
+                        values += $"'{propertyValue}'";
+                    }
+                    else if (propertyValue is DateTime)
+                    {
+                        values += $"'{((DateTime)propertyValue).ToString("yyyy-MM-dd HH:mm:ss")}'";
+                    }
+                    else
+                    {
+                        values += propertyValue?.ToString() ?? "NULL";
+                    }
+
+                    isFirst = false;
+                }
+            }
+
+            if (string.IsNullOrEmpty(columns) || string.IsNullOrEmpty(values))
+            {
+                throw new InvalidOperationException($"can not find any column or value for type {type.FullName} ");
+            }
+
+            // 构建插入语句
+            string insertQuery = $"INSERT INTO {tableName} ({columns}) VALUES ({values})";
+            Console.WriteLine(insertQuery);
+
+            // 执行插入语句
+            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            {
+                connection.Open();
+                using (SQLiteCommand command = new SQLiteCommand(insertQuery, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+        // 根据类型获取表名
+        private string GetTableName(Type type)
+        {
+            TableNameAttribute tableNameAttribute = type.GetCustomAttribute<TableNameAttribute>();
+            return tableNameAttribute?.TableName;
+        }
+        // 判断表是否存在
+        public bool IsTableExist(string tableName)
+        {
+            if (string.IsNullOrEmpty(tableName))
+            {
+                throw new ArgumentNullException(nameof(tableName), "table name cannot be null or empty。");
+            }
+
+            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            {
+                connection.Open();
+                string query = $"SELECT name FROM sqlite_master WHERE type='table' AND name = @TableName";
+                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@TableName", tableName);
+                    object result = command.ExecuteScalar();
+                    return result != null;
+                }
+            }
+        }
     }
-
-
     class Program
     {
         static void Main()
         {
-            string databasePath = "job_db.db";
-            TableCreator dbHelper = new TableCreator(databasePath);
-            dbHelper.CreateTable<Job>();
-            Console.WriteLine("Table created successfully.");
+            TableCreator tableCreator = new TableCreator("job_db.db");
+            DataParese dataParese = new DataParese();
+            var test = dataParese.SpiaderTest();
+            foreach (var item in test)
+            {
+                foreach (var i in item)
+                {
+                    tableCreator.InsertDataToTable(i);
+                }
+            }
         }
     }
 }

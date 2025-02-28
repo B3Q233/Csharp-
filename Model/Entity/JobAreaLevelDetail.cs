@@ -1,11 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using SpiderForJobInCore.Model.DataAttribute;
 
 namespace SpiderForJobInCore.Model.Entity
 {
     // 该类用于存储工作地点的详细区域信息，包含省、市、区等相关信息
-    [Table("job_area_level_detail_db")]
+    [TableName("job_area_level_detail")]
     public class JobAreaLevelDetail
     {
+        [Column("job_uuid", "TEXT PRIMARY KEY")]
+        [ForeignKey("recruitment_information", "job_id")]
+        public string JobAreaLevelDetailId { get; set; }
         // 省份的编码，可能是一个用于标识省份的特定代码
         public string provinceCode { get; set; }
         // 省份的名称，例如“上海”“北京”等

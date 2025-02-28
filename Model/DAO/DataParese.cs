@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SpiderForJobInCore.Model.DAO
@@ -10,7 +11,7 @@ namespace SpiderForJobInCore.Model.DAO
     internal class DataParese
     {
         // 将爬取的文件存入到本地json文件中，进行数据检查
-        public void SpiaderTest()
+        public List<List<RecruitmentInformation>> SpiaderTest()
         {
             string folderPath = Environment.CurrentDirectory + @"\data\";
             string[] allFiles = Directory.GetFiles(folderPath, "*", SearchOption.AllDirectories);
@@ -18,31 +19,17 @@ namespace SpiderForJobInCore.Model.DAO
             foreach (string file in allFiles)
             {
                 string content = File.ReadAllText(file);
-                var items = JsonSerializer.Deserialize<List<RecruitmentInformation>>(content);
+                Regex regex = new Regex("\"([a-z])");
+                string result = regex.Replace(content, m =>
+                {
+                    string matchedLowercase = m.Groups[1].Value;
+                    string matchedUppercase = matchedLowercase.ToUpper();
+                    return $"\"{matchedUppercase}";
+                });
+                var items = JsonSerializer.Deserialize<List<RecruitmentInformation>>(result);
                 allItems.Add(items);
             }
-            int cnt = 0;
-            int cntLeserThanOneYear = 0;
-            foreach (List<RecruitmentInformation> items in allItems)
-            {
-                foreach (RecruitmentInformation item in items)
-                {
-                    //Console.WriteLine(item.workYearString);
-                    cnt++;
-                    int age = 0;
-                    foreach (char c in item.WorkYear)
-                    {
-                        age = age * 10 + (c - '0');
-                    }
-                    if (item.WorkYearString[0] == '1')
-                    {
-                        Console.WriteLine(item.JobAreaLevelDetail.provinceString);
-                        //Console.WriteLine(item.jobDescribe);
-                        cntLeserThanOneYear++;
-                    }
-                }
-            }
-            Console.WriteLine(cntLeserThanOneYear);
+            return allItems;
         }
         public static void DataParse()
         {
