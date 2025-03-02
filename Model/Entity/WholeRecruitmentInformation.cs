@@ -1,16 +1,17 @@
-﻿using SpiderForJobInCore.Model.DataAttribute;
+﻿using System.Collections.Generic;
 
 
 namespace SpiderForJobInCore.Model.Entity
 {
     // 招聘信息类，包含了一个工作职位的完整信息
-    [TableName("recruitment_information")]
-    public class RecruitmentInformation
+    public class WholeRecruitmentInformation
     {
-        [Column("job_uuid", "TEXT PRIMARY KEY")]
         public string JobId { get; set; }
         // 工作职位的名称
         public string JobName { get; set; }
+
+        // 工作地点的详细区域信息
+        public JobAreaLevelDetail JobAreaLevelDetail { get; set; }
 
         //// 提供的薪资范围
         //[Column("provide_salary", "TEXT")]
@@ -40,7 +41,6 @@ namespace SpiderForJobInCore.Model.Entity
         //public string IndustryType2 { get; set; }
 
         // 行业类型 1 的文字描述
-        [Column("industry_type", "TEXT")]
         public string IndustryType1Str { get; set; }
 
         //// 行业类型 2 的文字描述
@@ -65,7 +65,6 @@ namespace SpiderForJobInCore.Model.Entity
         //public string CompanySizeCode { get; set; }
 
         // 公司所属行业类型 1 的文字描述
-        [Column("company_industry_type", "TEXT")]
         public string CompanyIndustryType1Str { get; set; }
 
         //// 公司所属行业类型 2 的文字描述
@@ -73,7 +72,6 @@ namespace SpiderForJobInCore.Model.Entity
         //public string CompanyIndustryType2Str { get; set; }
 
         // 职位信息更新的日期和时间
-        [Column("updata_date_time", "DATETIME")]
         public string UpdateDateTime { get; set; }
 
         //// 工作地点的经度
@@ -88,31 +86,19 @@ namespace SpiderForJobInCore.Model.Entity
         public string JobHref { get; set; }
 
         // 职位的详细描述
-        [Column("job_describe", "TEXT")]
         public string JobDescribe { get; set; }
 
         // 工作的期限类型
         public string TermStr { get; set; }
 
+        // 工作标签的列表
+        public List<JobTagsListItem> JobTagsList { get; set; }
+
         // 职位薪资的最高值
-        [Column("job_salary_max", "REAL")]
         public string JobSalaryMax { get; set; }
 
         // 职位薪资的最低值
-        [Column("job_salary_min", "REAL")]
         public string JobSalaryMin { get; set; }
-
-        // 工作标签代码
-        public string JobTagCode { get; set; }
-
-        // 工作城市
-        public string City { get; set; }
-
-        // 工作省份
-        public string Province { get; set; }
-
-        // 区名
-        public string District { get; set; }
     }
 }
 

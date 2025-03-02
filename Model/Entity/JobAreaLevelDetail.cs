@@ -7,19 +7,17 @@ namespace SpiderForJobInCore.Model.Entity
     public class JobAreaLevelDetail
     {
         [Column("job_uuid", "TEXT PRIMARY KEY")]
-        [ForeignKey("recruitment_information", "job_id")]
         public string JobAreaLevelDetailId { get; set; }
         // 省份的编码，可能是一个用于标识省份的特定代码
-        public string provinceCode { get; set; }
+        public string ProvinceCode { get; set; }
         // 省份的名称，例如“上海”“北京”等
-        public string provinceString { get; set; }
+        public string ProvinceString { get; set; }
         // 城市的编码，用于唯一标识某个城市
-        public string cityCode { get; set; }
+        public string CityCode { get; set; }
         // 城市的名称，如“上海”“广州”等
-        public string cityString { get; set; }
+        public string CityString { get; set; }
         // 区/县的名称，例如“闵行区”“朝阳区”等
-        public string districtString { get; set; }
-        // 地标信息，可能是具体的地点或标志性建筑
-        public string landMarkString { get; set; }
+        public string DistrictString { get; set; }
+
     }
 }
